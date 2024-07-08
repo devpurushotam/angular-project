@@ -176,7 +176,8 @@ export class CommonTestComponent implements OnInit {
       "block": "BELHAR",
       "cluster": "M.S. BELHAR",
       "school": "N.P.S. JHUNKA",
-      "code": "10232820901"
+      "code": "10232820901",
+      "redirecturl": "https://learning.diksha.gov.in/diksha/diksha_sso.php"
     }
 
     // this.encryptionService.generateKey().then((keyValue) => {
