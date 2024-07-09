@@ -8,7 +8,7 @@ import {
   EncryptionService
 } from '../services/encrypt-decrypt-object';
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 // const axios = require('axios');
 
@@ -176,21 +176,17 @@ export class CommonTestComponent implements OnInit {
       "block": "BELHAR",
       "cluster": "M.S. BELHAR",
       "school": "N.P.S. JHUNKA",
-      "code": "10232820901",
-      "redirecturl": "https://learning.diksha.gov.in/diksha/diksha_sso.php"
+      "code": "10232820901"
     }
 
-    // this.encryptionService.generateKey().then((keyValue) => {
-    //   this.encryptionService.encryptData(userDataObject, keyValue).then((encryptData) => {
-    //     console.log("encryptData", encryptData)
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer YOUR_TOKEN_HERE'
+    });
 
-        // this.http.post('https://jenkins.oci.diksha.gov.in/diksha-jwttoken/jwtlmsgenarator', userDataObject)
-        //   .subscribe(response => {
-        //     console.log('Server response:', response);
-        //   });
-
-          this.http.post('https://jenkins.oci.diksha.gov.in/diksha-jwttoken/jwtlmsgenarator', userDataObject).subscribe();
-      // });
-    // });
+    this.http.post('http://localhost:4000/users/redirectToLMS', userDataObject, { headers })
+      .subscribe(response => {
+        console.log('Server response:', response);
+      });
   }
 }
