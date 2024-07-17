@@ -155,4 +155,41 @@ export class userLMSToken {
         return JSON.parse(decodedData);
     }
 
+    // async testAPI(){
+    async dikshaReadApi(): Promise<any> {
+        const API = 'https://dev.oci.diksha.gov.in/api/data/v1/form/read';
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/x-www-form-urlencoded'
+        });
+
+        // const body = new HttpParams()
+        //     .set('type', 'customResourcebundles')
+        //     .set('action', 'list')
+        //     .set('subType', 'global')
+        //     .set('password', '') // Assuming the password is intentionally left empty
+        //     .set('component', '7portal');
+
+        let reqBody =
+        {
+            "request": {
+                "type": "customResourcebundles",
+                "action": "list",
+                "subType": "global",
+                "component": "portal"
+            }
+
+        }
+
+        try {
+            // const response = await this.http.get(URL, { responseType: 'text' }).pipe(first()).toPromise();
+            const response = await this.http.post(API, reqBody, { headers, responseType: 'text' }).pipe(first()).toPromise();
+            console.log("response", response)
+            return response;
+        } catch (error) {
+            console.error('API Error:', error);
+            throw error;
+        }
+    }
+    // }
+
 }

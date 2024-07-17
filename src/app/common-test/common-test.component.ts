@@ -27,6 +27,8 @@ export class CommonTestComponent implements OnInit {
   condition1 = 'student1';
   condition2 = 'teacher';
   condition3 = 'home1';
+  dikshaLogo = "https://dev.oci.diksha.gov.in/tenant/ntp/logo.png";
+  stateLogo = "https://dev.oci.diksha.gov.in/tenant/br/logo.png";
 
   constructor(public userLMSToken: userLMSToken, public encryptionService: EncryptionService, private http: HttpClient) { }
 
@@ -156,6 +158,16 @@ export class CommonTestComponent implements OnInit {
 
   testDivButton() {
     alert("calling");
+  }
+
+  callReadAPI(){
+    this.userLMSToken.dikshaReadApi()
+      .then(data => {
+        console.log("data", data)
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
   sendEncryptedData() {
