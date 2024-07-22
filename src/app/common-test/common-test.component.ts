@@ -28,11 +28,15 @@ export class CommonTestComponent implements OnInit {
   condition2 = 'teacher';
   condition3 = 'home1';
   dikshaLogo = "https://dev.oci.diksha.gov.in/tenant/ntp/logo.png";
-  stateLogo = "https://dev.oci.diksha.gov.in/tenant/br/logo.png";
+  stateLogo =  "https://dev.oci.diksha.gov.in/tenant/br/logo.png";
+  tenantInfo: any = {};
+
+  
 
   constructor(public userLMSToken: userLMSToken, public encryptionService: EncryptionService, private http: HttpClient) { }
 
   ngOnInit(): void {
+    this.tenantInfo.logo = "https://dev.oci.diksha.gov.in/tenant/br/logo.png";
   }
 
 
@@ -193,7 +197,6 @@ export class CommonTestComponent implements OnInit {
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer YOUR_TOKEN_HERE'
     });
 
     this.http.post('http://localhost:4000/users/redirectToLMS', userDataObject, { headers })
