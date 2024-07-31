@@ -5,11 +5,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CommonTestComponent } from './common-test/common-test.component';
 import { HttpClientModule } from '@angular/common/http';
+import { GoogleClassroomComponent } from './google-classroom/google-classroom.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CommonTestComponent
+    CommonTestComponent,
+    GoogleClassroomComponent
   ],
   imports: [
     BrowserModule,

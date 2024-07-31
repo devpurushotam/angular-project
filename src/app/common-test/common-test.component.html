@@ -22,8 +22,17 @@
 
 <p>Style 1</p> <br />
 <div style="display: flex;">
-    <img (click)="testDivButton()" class="cursor-pointer" alt="Diksha Logo" [src]="dikshaLogo" style="width: 97px; height: 55px;">
-    <div *ngIf=" 'https://dev.oci.diksha.gov.in/tenant/ntp/logo.png' != tenantInfo.logo " style="width: 2px; height: 50px; background-color: #d5d5d5; margin: 0 12px;"></div>
-    <img *ngIf=" 'https://dev.oci.diksha.gov.in/tenant/ntp/logo.png' != tenantInfo.logo " (click)="testDivButton()" alt="State Logo" [src]="stateLogo" style="width: 55px; height: 55px;">
+    <img (click)="testDivButton()" class="cursor-pointer" alt="Diksha Logo" [src]= "mainLogo" style="width: 97px; height: 55px;">
+    <div *ngIf=" 'mainLogo' != tenantInfo.logo " style="width: 2px; height: 50px; background-color: #d5d5d5; margin: 0 12px;"></div>
+    <img *ngIf=" 'mainLogo' != tenantInfo.logo " (click)="testDivButton()" alt="State Logo" [src]= stateLogo style="width: 55px; height: 55px;">
+</div>
+<br><br>
+
+<div >
+    <button *ngIf="isShowGoogleCLassAddButton" class="btn add-gc-btn" (click) = "callAPI($event)">Add</button>
 </div>
 <h1 *ngIf="(condition1 == 'student' || condition2 == 'teacher') && condition3 == 'home' ">Satisfied</h1>
+
+<br><br>
+
+<button  (click) = "googleRedirec()">Generate Token for google class room</button>

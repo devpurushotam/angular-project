@@ -70,6 +70,35 @@ export class userLMSToken {
         return this.http.post(apiUrl, data, { headers }).toPromise();
     }
 
+
+// *******************GOOGLE CLASS ROOM API PART***********************
+
+    createCourse(accessToken: string, course: any): Promise<any> {
+        const apiUrl = 'https://classroom.googleapis.com/v1/courses';
+        const data = JSON.stringify(course);
+
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        });
+        return this.http.post(apiUrl, data, { headers }).toPromise();
+    }
+
+    addCourseWorkMaterial(accessToken: string, courseId: string, material: any) {
+        const apiUrl = `https://classroom.googleapis.com/v1/courses/${courseId}/courseWorkMaterials`;
+        const data = JSON.stringify(material);
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        });
+    
+        return this.http.post(apiUrl, data, { headers }).toPromise();
+      }
+
+    //   *****************************************************************************
+
+
+
     getTokenTest(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.getToken_test().then((responseData) => {

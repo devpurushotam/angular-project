@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import {
   userLMSToken
   // getDikshaToken 
@@ -27,16 +28,40 @@ export class CommonTestComponent implements OnInit {
   condition1 = 'student1';
   condition2 = 'teacher';
   condition3 = 'home1';
-  dikshaLogo = "https://dev.oci.diksha.gov.in/tenant/ntp/logo.png";
-  stateLogo =  "https://dev.oci.diksha.gov.in/tenant/br/logo.png";
+  stateLogo = "https://dev.oci.diksha.gov.in/tenant/br/logo.png";
   tenantInfo: any = {};
+  currentUrl: string;
+  src = "https://www.google.com"
+  isShowGoogleCLassAddButton: boolean = false;
 
-  
+  gcRedirectURI = "https://dev.oci.diksha.gov.in/explore/1?id=ncert_k-12&selectedTab=all&addOnToken=AKCT2-mIlOZH6q87MGUCqowIMjlj:1722249049050&courseId=701756465924&postId=701754031095&itemId=701754031095&itemType=courseWork&login_hint=114219037756322445346"
 
-  constructor(public userLMSToken: userLMSToken, public encryptionService: EncryptionService, private http: HttpClient) { }
+
+
+  constructor(
+    public userLMSToken: userLMSToken,
+    public encryptionService: EncryptionService,
+    private http: HttpClient) { }
+
+  mainLogo: string;
 
   ngOnInit(): void {
     this.tenantInfo.logo = "https://dev.oci.diksha.gov.in/tenant/br/logo.png";
+    console.log('Current URL:', window.location.href);
+
+    // let url = "https://dev.oci.diksha.gov.in/br/explore?board=State%20(Bihar)&medium=Hindi&gradeLevel=Class%202&&id=br_k-12&selectedTab=home";
+    let url = "https://diksha.gov.in/br/explore?board=State%20(Bihar)&medium=Bengali&gradeLevel=Class%202&&id=br_k-12&selectedTab=home";
+    if (url.includes('dev.oci.diksha.gov.in')) { // dev.oci.diksha.gov.in
+      this.mainLogo = 'https://dev.oci.diksha.gov.in/tenant/ntp/logo.png';
+    } else if (url.includes('diksha.gov.in')) { // diksha.gov.in
+      this.mainLogo = 'https://diksha.gov.in/tenant/ntp/logo.png';
+    }
+
+    if (this.gcRedirectURI.includes('addOnToken')) {
+      this.isShowGoogleCLassAddButton = true
+    }
+
+    console.log("mainLogo", this.mainLogo)
   }
 
 
@@ -164,7 +189,7 @@ export class CommonTestComponent implements OnInit {
     alert("calling");
   }
 
-  callReadAPI(){
+  callReadAPI() {
     this.userLMSToken.dikshaReadApi()
       .then(data => {
         console.log("data", data)
@@ -203,5 +228,19 @@ export class CommonTestComponent implements OnInit {
       .subscribe(response => {
         console.log('Server response:', response);
       });
+  }
+
+  callAPI(event: Event) {
+    event.stopPropagation(); // Prevents the event from bubbling up to the parent
+    window.open(this.src, '_blank'); // new tab
+  }
+
+  googleRedirec() {
+    const clientId = '872658188174-tf46ui5fe852qae790rpjj7jdbnljbi9.apps.googleusercontent.com';
+    const redirectUri = encodeURIComponent('http://localhost:4200/google-class-room'); // https://dev.oci.diksha.gov.in/explore/1?id=ekstep_ncert_k-12&selectedTab=all
+    // const scope = 'https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.coursework.me';
+    const scope = encodeURIComponent('https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.coursework.me https://www.googleapis.com/auth/classroom.courseworkmaterials');
+    const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
+    window.location.href = authUrl;
   }
 }
