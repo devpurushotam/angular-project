@@ -44,13 +44,20 @@ export class CommonTestComponent implements OnInit {
     private http: HttpClient) { }
 
   mainLogo: string;
+  showMainLogo : boolean = true;
 
   ngOnInit(): void {
     this.tenantInfo.logo = "https://dev.oci.diksha.gov.in/tenant/br/logo.png";
     console.log('Current URL:', window.location.href);
+    this.getLolo();
 
     // let url = "https://dev.oci.diksha.gov.in/br/explore?board=State%20(Bihar)&medium=Hindi&gradeLevel=Class%202&&id=br_k-12&selectedTab=home";
     let url = "https://diksha.gov.in/br/explore?board=State%20(Bihar)&medium=Bengali&gradeLevel=Class%202&&id=br_k-12&selectedTab=home";
+
+    let ekstepUrl = "https://diksha.gov.in/resources?board=CBSE&medium=English&gradeLevel=Class%204&id=ekstep_ncert_k-12&selectedTab=home"
+
+   
+
     if (url.includes('dev.oci.diksha.gov.in')) { // dev.oci.diksha.gov.in
       this.mainLogo = 'https://dev.oci.diksha.gov.in/tenant/ntp/logo.png';
     } else if (url.includes('diksha.gov.in')) { // diksha.gov.in
@@ -60,6 +67,8 @@ export class CommonTestComponent implements OnInit {
     if (this.gcRedirectURI.includes('addOnToken')) {
       this.isShowGoogleCLassAddButton = true
     }
+    
+    
 
     console.log("mainLogo", this.mainLogo)
   }
@@ -150,6 +159,20 @@ export class CommonTestComponent implements OnInit {
     })
   }
 
+  getLolo() {
+    this.userLMSToken.getLogo('ekstep').then((response: any) => {
+      console.log("getting logo response ", response?.result?.appLogo);
+
+      if (response?.result?.appLogo == "https://diksha.gov.in/tenant/ekstep/appLogo.png") {
+        console.log("ekstep url detected");
+        this.showMainLogo = false
+      }
+
+    }).catch((error) => {
+      console.log(error);
+    })
+  }
+
 
 
   getUserLOcationData() {
@@ -235,7 +258,7 @@ export class CommonTestComponent implements OnInit {
     window.open(this.src, '_blank'); // new tab
   }
 
-  googleRedirec() {
+  googleRedirect() {
     const clientId = '872658188174-tf46ui5fe852qae790rpjj7jdbnljbi9.apps.googleusercontent.com';
     const redirectUri = encodeURIComponent('http://localhost:4200/google-class-room'); // https://dev.oci.diksha.gov.in/explore/1?id=ekstep_ncert_k-12&selectedTab=all
     // const scope = 'https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.coursework.me';

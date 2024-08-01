@@ -22,8 +22,8 @@
 
 <p>Style 1</p> <br />
 <div style="display: flex;">
-    <img (click)="testDivButton()" class="cursor-pointer" alt="Diksha Logo" [src]= "mainLogo" style="width: 97px; height: 55px;">
-    <div *ngIf=" 'mainLogo' != tenantInfo.logo " style="width: 2px; height: 50px; background-color: #d5d5d5; margin: 0 12px;"></div>
+    <img *ngIf="showMainLogo" (click)="testDivButton()" class="cursor-pointer" alt="Diksha Logo" [src]= "mainLogo" style="width: 97px; height: 55px;">
+    <div *ngIf=" ('mainLogo' != tenantInfo.logo) && showMainLogo " style="width: 2px; height: 50px; background-color: #d5d5d5; margin: 0 12px;"></div>
     <img *ngIf=" 'mainLogo' != tenantInfo.logo " (click)="testDivButton()" alt="State Logo" [src]= stateLogo style="width: 55px; height: 55px;">
 </div>
 <br><br>
@@ -35,4 +35,4 @@
 
 <br><br>
 
-<button  (click) = "googleRedirec()">Generate Token for google class room</button>
+<button  (click) = "googleRedirect()">Generate Token for google class room</button>

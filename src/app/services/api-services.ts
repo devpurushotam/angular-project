@@ -16,6 +16,17 @@ export class userLMSToken {
         return this.http.get<any>(url);
     }
 
+    async getLogo(tenantName: string): Promise<any> {
+        const url = `https://diksha.gov.in/v1/tenant/info/${tenantName}`
+        try {
+            const response = await this.http.get(url).pipe(first()).toPromise();
+            return response;
+        } catch (error) {
+            console.error('API Error:', error);
+            throw error;
+        }
+    }
+
     // getToken_test(): Observable<any> {
     //     const URL = "https://dev.oci.diksha.gov.in/auth/realms/sunbird/protocol/openid-connect/token";
     //     let headers: HttpHeaders = new HttpHeaders();
@@ -71,7 +82,7 @@ export class userLMSToken {
     }
 
 
-// *******************GOOGLE CLASS ROOM API PART***********************
+    // *******************GOOGLE CLASS ROOM API PART***********************
 
     createCourse(accessToken: string, course: any): Promise<any> {
         const apiUrl = 'https://classroom.googleapis.com/v1/courses';
@@ -88,12 +99,57 @@ export class userLMSToken {
         const apiUrl = `https://classroom.googleapis.com/v1/courses/${courseId}/courseWorkMaterials`;
         const data = JSON.stringify(material);
         const headers = new HttpHeaders({
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
         });
-    
+
         return this.http.post(apiUrl, data, { headers }).toPromise();
-      }
+    }
+
+
+    exchangeCodeForToken1(code: string) {
+        const clientId = '872658188174-tf46ui5fe852qae790rpjj7jdbnljbi9.apps.googleusercontent.com';
+        const clientSecret = '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';
+        const redirectUri = 'http://localhost:4200/google-class-room';
+        const url = 'https://oauth2.googleapis.com/token';
+        const body = new HttpParams()
+            .set('code', code)
+            .set('client_id', clientId)
+            .set('client_secret', clientSecret)
+            .set('redirect_uri', redirectUri)
+            .set('grant_type', 'authorization_code');
+
+        this.http.post(url, body.toString(), {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).subscribe((response: any) => {
+            const accessToken = response.access_token;
+            console.log('Access Token:', accessToken);
+            //   this.token = accessToken;
+            return accessToken;
+            // Save the token and use it to create courses
+            // this.router.navigate(['/google-class-room']);
+        }, error => {
+            console.error('Error exchanging code for token:', error);
+        });
+    }
+
+
+    exchangeCodeForToken(code: string): Promise<any> {
+        const clientId = '872658188174-tf46ui5fe852qae790rpjj7jdbnljbi9.apps.googleusercontent.com';
+        const clientSecret = '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';
+        const redirectUri = 'http://localhost:4200/google-class-room';
+        const apiUrl = 'https://oauth2.googleapis.com/token';
+        const body = new HttpParams()
+            .set('code', code)
+            .set('client_id', clientId)
+            .set('client_secret', clientSecret)
+            .set('redirect_uri', redirectUri)
+            .set('grant_type', 'authorization_code');
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/x-www-form-urlencoded',
+        });
+        return this.http.post(apiUrl, body, { headers }).toPromise();
+    }
 
     //   *****************************************************************************
 

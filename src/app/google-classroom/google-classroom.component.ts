@@ -15,13 +15,7 @@ import { userLMSToken } from '../services/api-services';
   `
 })
 export class GoogleClassroomComponent implements OnInit {
-
-  private clientId = '872658188174-tf46ui5fe852qae790rpjj7jdbnljbi9.apps.googleusercontent.com';
-  private clientSecret = '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';
-  private redirectUri = 'http://localhost:4200/google-class-room';
-
   token: any;
-
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
@@ -34,38 +28,23 @@ export class GoogleClassroomComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       const code = params['code'];
       if (code) {
-        this.exchangeCodeForToken(code);
+        this.userLMSToken.exchangeCodeForToken(code)
+          .then(tokenResponse => {
+            console.log("getting token.............", tokenResponse?.access_token);
+            this.token = tokenResponse?.access_token;
+          })
+          .catch(error => {
+            console.error(error);
+          });
       }
     });
   }
 
-  exchangeCodeForToken(code: string) {
-    const url = 'https://oauth2.googleapis.com/token';
-    const body = new HttpParams()
-      .set('code', code)
-      .set('client_id', this.clientId)
-      .set('client_secret', this.clientSecret)
-      .set('redirect_uri', this.redirectUri)
-      .set('grant_type', 'authorization_code');
-
-    this.http.post(url, body.toString(), {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    }).subscribe((response: any) => {
-      const accessToken = response.access_token;
-      console.log('Access Token:', accessToken);
-      this.token = accessToken;
-      // Save the token and use it to create courses
-      // this.router.navigate(['/google-class-room']);
-    }, error => {
-      console.error('Error exchanging code for token:', error);
-    });
-  }
 
   createCourse() {
-
     const course = {
-      name: 'test 1',
-      section: 'Period 4',
+      name: 'Course test 1',
+      section: 'Class 2',
       descriptionHeading: 'test course',
       room: '104',
       ownerId: 'me',
@@ -77,7 +56,6 @@ export class GoogleClassroomComponent implements OnInit {
         const courseId = response?.id;
         this.addCourseMaterial(courseId);
         console.log("getting google classroom response", response);
-        // window.alert("Course added successfully in google class room");
       })
       .catch(error => {
         console.error(error);
@@ -86,7 +64,6 @@ export class GoogleClassroomComponent implements OnInit {
 
 
   addCourseMaterial(courseId: string) {
-
     console.log("courseId", courseId)
     const material = {
       title: 'Course Introduction Material',
