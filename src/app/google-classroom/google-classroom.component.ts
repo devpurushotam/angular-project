@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
 // import { GoogleClassroomService } from '../services/google-classroom-service';
-import { userLMSToken } from '../services/api-services';
+import { GoogleClassroomService } from '../services/google-classroom-service';
 
 @Component({
   selector: 'app-google-classroom',
@@ -20,15 +20,15 @@ export class GoogleClassroomComponent implements OnInit {
     private route: ActivatedRoute,
     private http: HttpClient,
     private router: Router,
-    // public googleClassroomService: GoogleClassroomService,
-    public userLMSToken: userLMSToken,
+    public googleClassroomService: GoogleClassroomService,
+    // public userLMSToken: userLMSToken,
   ) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const code = params['code'];
       if (code) {
-        this.userLMSToken.exchangeCodeForToken(code)
+        this.googleClassroomService.exchangeCodeForToken(code)
           .then(tokenResponse => {
             console.log("getting token.............", tokenResponse?.access_token);
             this.token = tokenResponse?.access_token;
@@ -51,7 +51,7 @@ export class GoogleClassroomComponent implements OnInit {
       courseState: 'ACTIVE',
     };
 
-    this.userLMSToken.createCourse(this.token, course)
+    this.googleClassroomService.createCourse(this.token, course)
       .then(response => {
         const courseId = response?.id;
         this.addCourseMaterial(courseId);
@@ -78,7 +78,7 @@ export class GoogleClassroomComponent implements OnInit {
       state: 'PUBLISHED'
     };
 
-    this.userLMSToken.addCourseWorkMaterial(this.token, courseId, material)
+    this.googleClassroomService.addCourseWorkMaterial(this.token, courseId, material)
       .then(response => {
         console.log('Material added:', response);
       })
