@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { first } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -43,5 +44,18 @@ export class GoogleClassroomService {
             'Content-Type': 'application/x-www-form-urlencoded',
         });
         return this.http.post(apiUrl, body, { headers }).toPromise();
+    }
+
+    // get course details using do-id 
+
+    async getCourseDetails(doId: string): Promise<any> {
+        const url = `https://dev.oci.diksha.gov.in/api/course/v1/hierarchy/${doId}?orgdetails=orgName,email&licenseDetails=name,description,url`
+        try {
+            const response = await this.http.get(url).pipe(first()).toPromise();
+            return response;
+        } catch (error) {
+            console.error('API Error:', error);
+            throw error;
+        }
     }
 }
