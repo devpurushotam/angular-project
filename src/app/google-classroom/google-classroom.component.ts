@@ -1,8 +1,7 @@
 // import { Component, OnInit } from '@angular/core';
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 // import { GoogleClassroomService } from '../services/google-classroom-service';
 import { GoogleClassroomService } from '../services/google-classroom-service';
 
@@ -17,10 +16,9 @@ import { GoogleClassroomService } from '../services/google-classroom-service';
 export class GoogleClassroomComponent implements OnInit {
   token: any;
   courseDetail: any = {};
+  courseId: any;
   constructor(
     private route: ActivatedRoute,
-    private http: HttpClient,
-    private router: Router,
     public googleClassroomService: GoogleClassroomService,
     // public userLMSToken: userLMSToken,
   ) { }
@@ -95,6 +93,100 @@ export class GoogleClassroomComponent implements OnInit {
       .then(response => {
         console.log('Material added:', response);
         window.alert(`Course has been added successfully : ${this.courseDetail?.name}`)
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  getAllCourse() {
+    this.googleClassroomService.listCourses(this.token).then((response: any) => {
+      console.log("getting google course list ", response?.courses);
+      const courseId = response?.courses[0].id
+
+      this.googleClassroomService.listCourseWork(this.token, courseId)
+        .then((response: any) => {
+          console.log("getting listCourseWork", response);
+          const courseWorkId = response?.courseWork[0].id
+          // const addOnAttachment = {
+          //   'addOnId': 'do_313476037573746688118',
+          //   'properties': {
+          //     'videoUrl': 'https://diksha.gov.in/play/questionset/do_313476037573746688118',
+          //     'title': 'QS_PUBLISH',
+          //     'thumbnail': 'https://diksha.gov.in/tenant/ntp/logo.png'
+          //   }
+          // };
+
+          const addOnAttachment =  {
+            
+            "teacherViewUri": {
+              EmbedUri : {
+                "uri" : "https://diksha.gov.in/play/questionset/do_3138391815571865601376"
+              }
+            },
+            // "studentViewUri": {
+            //   EmbedUri : {
+            //     "uri" : "string"
+            //   }
+            // },
+            // "studentWorkReviewUri": {
+            //   object (EmbedUri)
+            // },
+          }
+          
+
+          this.googleClassroomService.addAddOnAttachment(this.token, courseId, courseWorkId, addOnAttachment)
+            .then(response => {
+              console.log('Material added:', response);
+              window.alert(`Course has been added successfully : ${this.courseDetail?.name}`)
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
+
+
+
+
+    }).catch((error) => {
+      console.log(error);
+    })
+  }
+
+
+  createCourseWork() {
+
+    const courseWork = {
+      title: 'Sample Coursework',
+      description: 'This is a sample coursework',
+      materials: [
+        {
+          link: {
+            url: 'https://example.com/video',
+            title: 'Sample Video'
+          }
+        }
+      ],
+      workType: 'ASSIGNMENT',
+      state: 'PUBLISHED',
+      dueDate: {
+        year: 2024,
+        month: 8,
+        day: 10
+      },
+      dueTime: {
+        hours: 23,
+        minutes: 59
+      }
+    };
+
+    this.googleClassroomService.createCourseWork(this.token, this.courseId, courseWork)
+      .then(response => {
+        console.log("getting createCourseWork response", response);
       })
       .catch(error => {
         console.error(error);

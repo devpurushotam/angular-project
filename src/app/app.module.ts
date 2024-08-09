@@ -6,12 +6,16 @@ import { AppComponent } from './app.component';
 import { CommonTestComponent } from './common-test/common-test.component';
 import { HttpClientModule } from '@angular/common/http';
 import { GoogleClassroomComponent } from './google-classroom/google-classroom.component';
+import { GoogleClassroomIframeComponent } from './google-classroom-iframe/google-classroom-iframe.component';
+import { GoogleAuthComponent } from './google-auth/google-auth.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CommonTestComponent,
-    GoogleClassroomComponent
+    GoogleClassroomComponent,
+    GoogleClassroomIframeComponent,
+    GoogleAuthComponent
   ],
   imports: [
     BrowserModule,

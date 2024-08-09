@@ -44,7 +44,7 @@ export class CommonTestComponent implements OnInit {
     private http: HttpClient) { }
 
   mainLogo: string;
-  showMainLogo : boolean = true;
+  showMainLogo: boolean = true;
 
   ngOnInit(): void {
     this.tenantInfo.logo = "https://dev.oci.diksha.gov.in/tenant/br/logo.png";
@@ -56,7 +56,7 @@ export class CommonTestComponent implements OnInit {
 
     let ekstepUrl = "https://diksha.gov.in/resources?board=CBSE&medium=English&gradeLevel=Class%204&id=ekstep_ncert_k-12&selectedTab=home"
 
-   
+
 
     if (url.includes('dev.oci.diksha.gov.in')) { // dev.oci.diksha.gov.in
       this.mainLogo = 'https://dev.oci.diksha.gov.in/tenant/ntp/logo.png';
@@ -67,8 +67,8 @@ export class CommonTestComponent implements OnInit {
     if (this.gcRedirectURI.includes('addOnToken')) {
       this.isShowGoogleCLassAddButton = true
     }
-    
-    
+
+
 
     console.log("mainLogo", this.mainLogo)
   }
@@ -263,7 +263,16 @@ export class CommonTestComponent implements OnInit {
     const redirectUri = encodeURIComponent('http://localhost:4200/google-class-room'); // https://dev.oci.diksha.gov.in/explore/1?id=ekstep_ncert_k-12&selectedTab=all
     // const scope = 'https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.coursework.me';
     const scope = encodeURIComponent('https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.coursework.me https://www.googleapis.com/auth/classroom.courseworkmaterials');
-    const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
+
+    const scopes = [
+      'https://www.googleapis.com/auth/classroom.coursework.students',
+      'https://www.googleapis.com/auth/classroom.announcements',
+      'https://www.googleapis.com/auth/classroom.courses',
+      'https://www.googleapis.com/auth/classroom.coursework.me',
+      'https://www.googleapis.com/auth/classroom.courseworkmaterials'
+    ].join(' ');
+
+    const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scopes}`;
     window.location.href = authUrl;
   }
 }
