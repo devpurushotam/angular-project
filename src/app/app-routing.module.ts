@@ -11,7 +11,8 @@ import { SilentAuthComponent } from './silent-auth/silent-auth.component';
 
 
 const routes: Routes = [
-  { path: 'home', component: CommonTestComponent },
+  // { path: 'Home', component: CommonTestComponent },
+  { path: 'common-test', component: CommonTestComponent },
   { path: 'google-class-room', component: GoogleClassroomComponent },
   { path: 'iframe-test', component: GoogleClassroomIframeComponent },
   { path: 'google-auth', component: GoogleAuthComponent },
