@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { GoogleClassroomComponent } from './google-classroom/google-classroom.component';
 import { GoogleClassroomIframeComponent } from './google-classroom-iframe/google-classroom-iframe.component';
 import { GoogleAuthComponent } from './google-auth/google-auth.component';
+import { SilentAuthComponent } from './silent-auth/silent-auth.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { GoogleAuthComponent } from './google-auth/google-auth.component';
     CommonTestComponent,
     GoogleClassroomComponent,
     GoogleClassroomIframeComponent,
-    GoogleAuthComponent
+    GoogleAuthComponent,
+    SilentAuthComponent
   ],
   imports: [
     BrowserModule,

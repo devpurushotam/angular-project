@@ -9,6 +9,13 @@ import { GoogleAuthService } from '../services/google-auth-part';
 export class GoogleAuthComponent implements OnInit {
   constructor(private authService: GoogleAuthService) { }
 
+
+  /* 
+    Note-: 
+    Tested on - http://localhost:4200 env
+    Authorised JavaScript origins - http://localhost:4200
+    Authorised redirect URIs - http://localhost:4200/google-auth
+  */
   ngOnInit(): void {
     this.authService.initGapiClient();
   }

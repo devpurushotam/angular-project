@@ -8,9 +8,21 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
+  navItems = [
+    { name: 'Home', link: '/home' },
+    { name: 'G-Classroom', link: '/google-class-room' },
+    { name: 'G-Auth', link: '/google-auth' },
+    { name: 'G-iframe-Test', link: '/iframe-test' },
+    { name: 'G-silent-auth', link: '/silent-auth' }
+
+  ];
+
   title = 'my-angular-project';
 
   iframeUrl = "http://localhost:8080"; // Pointing to local HTML file for testing
+
+
 
   constructor(
     // private googleAuthService: GoogleAuthService

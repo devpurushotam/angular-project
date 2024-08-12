@@ -1,14 +1,8 @@
 <nav>
-  <a routerLink="/home">Home</a>
-  <br>
-  <a routerLink="/google-class-room">Google Class Room</a>
+  <ul>
+    <li *ngFor="let item of navItems">
+      <a [routerLink]="item.link">{{ item.name }}</a>
+    </li>
+  </ul>
 </nav>
-
-<!-- <button (click)="signIn()">Sign in</button> -->
-
-<button (click)="addAttachment()">addAttachment</button>
-
-<!-- <button>generate token</button> -->
-
-<!-- Router outlet -->
 <router-outlet></router-outlet>
