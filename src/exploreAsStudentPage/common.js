@@ -265,6 +265,38 @@ $(document).ready(function () {
     },
   ];
 
+  const midStageGradeLevels = [{
+    label: "Class 6",
+    value: "Class 6"
+  },
+  {
+    label: "Class 7",
+    value: "Class 7"
+  },
+  {
+    label: "Class 8",
+    value: "Class 8"
+  }
+];
+
+const secStageGradeLevels = [{
+    label: "Class 9",
+    value: "Class 9"
+  },
+  {
+    label: "Class 10",
+    value: "Class 10"
+  },
+  {
+    label: "Class 11",
+    value: "Class 11"
+  }, 
+  {
+    label: "Class 12",
+    value: "Class 12"
+  }
+];
+
   let filterData = {};
   foundationalGradeLevels.forEach((element) => {
     $(".explore-grade-levels").append(
@@ -278,12 +310,21 @@ $(document).ready(function () {
     );
   });
 
+  midStageGradeLevels.forEach(element => {
+    $('.explore-mid-stage-grade-levels').append('<option value="' + element.value + '">' + element.label + '</option>');
+  });
+
+  secStageGradeLevels.forEach(element => {
+    $('.explore-sec-stage-grade-levels').append('<option value="' + element.value + '">' + element.label + '</option>');
+  });
+
   contentTypes.forEach((element) => {
     $(".explore-content-type").append(
       '<option value="' + element.value + '">' + element.label + "</option>"
     );
   });
 
+  let selected_stage ="";
   states.forEach((element) => {
     $(".state-boards").append(
       '<option value="' + element.value + '">' + element.label + "</option>"
@@ -304,11 +345,8 @@ $(document).ready(function () {
     let state = $(this).attr("selected-state");
     if (state && state !== "#") {
         filterData.state = state;
-    //   localStorage.setItem("explore-state", state);
     }
-    // fetchContents();
-    
-    fetchContents(filterData);
+    fetchContents();
   });
 
   $(".explore-content-type").on("change", function () {
@@ -324,13 +362,8 @@ $(document).ready(function () {
     console.log("contenttype-->", state);
     if (state && state !== "#") {
         filterData = {...filterData, contentType : state};
-    //   localStorage.setItem("explore-contenttype", state);
     }
-    console.log("content type selected...");
-    
-    console.log("content type selected...", filterData);
-    fetchContents(filterData);
-    // fetchContents();
+    fetchContents();
   });
 
   $(".explore-grade-levels").on("change", function () {
@@ -345,13 +378,8 @@ $(document).ready(function () {
     let state = $(this).attr("selected-grade");
     if (state && state !== "#") {
         filterData = {...filterData, grade : state};
-    //   localStorage.setItem("explore-grade", state);
-    }
-    console.log("grade selected...");
-    
-    console.log("grade selected...", filterData);
-    fetchContents(filterData);
-    // fetchContents();
+    }    
+    fetchContents();
   });
 
   $(".explore-foundation-grade-levels").on("change", function () {
@@ -366,28 +394,48 @@ $(document).ready(function () {
     let state = $(this).attr("selected-grade");
     if (state && state !== "#") {
         filterData = {...filterData, grade : state};
-    //   localStorage.setItem("explore-grade", state);
     }
-   
-    fetchContents(filterData);
-    // fetchContents();
+    fetchContents();
   });
 
   $(".prep-stage").on("click", function () {
-    if(localStorage.getItem("selected-stage") != 'preparatory') {
+    console.log("stage wiill be changed to preparatory..", selected_stage)
+
+    if(selected_stage != 'preparatory') {
         console.log("stage changed to preparatory..")
         filterData ={};
     }
-    localStorage.setItem("selected-stage", "preparatory");
+    selected_stage = "preparatory";
+  });
+
+  $(".mid-stage").on("click", function () {
+    console.log("stage will be changed to middle..", selected_stage)
+    if(selected_stage != 'middle') {
+        console.log("stage changed to middle..")
+        filterData ={};
+    }
+    selected_stage = "middle";
+  });
+
+  $(".sec-stage").on("click", function () {
+    console.log("stage will be changed to secondary..", selected_stage)
+
+    if(selected_stage != 'secondary') {
+        console.log("stage changed to secondary..")
+
+        filterData ={};
+    }
+    selected_stage = "secondary";
   });
 
   $(".found-stage").on("click", function () {
-    
-    if(localStorage.getItem("selected-stage") != 'foundation') {
+    console.log("stage will be changed to fundation..", selected_stage)
+
+    if(selected_stage != 'foundation') {
         console.log("stage changed to fundation..")
         filterData ={};
     }
-    localStorage.setItem("selected-stage", "foundation");
+    selected_stage = "foundation";
   });
 
   function fetchContents() {
@@ -559,26 +607,30 @@ $(document).ready(function () {
   }
 
   function displayCards(data) {
-    console.log("data =", data);
     let stage = "";
-    stage = localStorage.getItem("selected-stage");
-    console.log("stage-->", stage);
-    var targetCarouselId;
+    stage = selected_stage;
+    var targetCarouselId, indicatorsId, itemsId;
     switch (stage) {
       case "foundation":
         targetCarouselId = "#foundStageCarousel";
-        console.log("targetCarouselId-->", targetCarouselId);
+        indicatorsId = "foundation-carousel-indicators";
+        itemsId = "foundation-carousel-items";
         break;
       case "preparatory":
         targetCarouselId = "#prepStageCarousel";
-        console.log("targetCarouselId-->", targetCarouselId);
+        indicatorsId = "preparatory-carousel-indicators";
+        itemsId = "preparatory-carousel-items";
         break;
-      case 3:
-        targetCarouselId = "#midStageCarousel";
-        break;
-      case 4:
-        targetCarouselId = "#secStageCarousel";
-        break;
+        case "middle":
+            targetCarouselId = '#midStageCarousel';
+            indicatorsId = "middle-carousel-indicators";
+            itemsId = "middle-carousel-items";
+            break;
+          case "secondary":
+            targetCarouselId = '#secStageCarousel';
+            indicatorsId = "secondary-carousel-indicators";
+            itemsId = "secondary-carousel-items";
+            break;
       default:
         targetCarouselId = "#foundStageCarousel"; // Default case if stage value is invalid
     }
@@ -587,49 +639,46 @@ $(document).ready(function () {
       html = "",
       activeClass;
     data.forEach((item, index) => {
-        console.log("item--->",item);
       // Set up the slide
       activeClass = index === 0 ? "active" : ""; // The first slide should have 'active' class
-      console.log("activeClass--->",activeClass);
-      console.log("item.primaryCategory--->",item.primaryCategory);
-
 
       let cardHtml = "";
       cardHtml = `
-                <div class="carousel-item ${activeClass}" data-contenttype="${item.primaryCategory}" data-board="${item.se_boards[0]}" data-grade="${item.se_gradeLevels[0]}">
-                  <a class="nistha-course-nav-link">
-                    <div class="nistha-course-card">
-                        <div class="book-image">
-                            <img src=${item.appIcon} alt="">
-                        </div>
-                        <div class="nistha-course-detail">
+                <button onclick="redirectTpPortal('${item.se_boards[0]}','${item.se_gradeLevels[0]}', '${item.primaryCategory}')" style="border: none; background: none; padding: 0; margin: 0; width: 100%; text-align: left;">
+                    <div class="carousel-item ${activeClass}" data-contenttype="${item.primaryCategory}" data-board="${item.se_boards[0]}" data-grade="${item.se_gradeLevels[0]}">
+                        <div class="nistha-course-nav-link">
+                        <div class="nistha-course-card">
+                            <div class="book-image">
+                            <img src="${item.appIcon}" alt="">
+                            </div>
+                            <div class="nistha-course-detail">
                             <div class="course-strip">
                                 <div class="strip-wrap">
-                                    <span>
-                                        <img src="../assets/homepage/nistha-lp/parents/book-icon.svg" alt="book">
-                                    </span>
-                                    <span class="strip-title">${item.primaryCategory}</span>
+                                <span>
+                                    <img src="../assets/homepage/nistha-lp/parents/book-icon.svg" alt="book">
+                                </span>
+                                <span class="strip-title">${item.primaryCategory}</span>
                                 </div>
                             </div>
                             <div class="book-detail">
-                                <span class="course-icon subject"><img src="../assets/homepage/nistha-lp/course/subject.svg" alt=""> </span>
-                                <span class="book-text">Subject : ${item.se_subjects[0]}</span>
+                                <span class="course-icon subject"><img src="../assets/homepage/nistha-lp/course/subject.svg" alt=""></span>
+                                <span class="book-text">Subject: ${item.se_subjects[0]}</span>
                             </div>
                             <div class="course-title">
-                                <h4 title="Parent Handbook Copy of Health & Physical Education "><bdi>${item.name}</bdi></h4>
+                                <h4 title="Parent Handbook Copy of Health & Physical Education"><bdi>${item.name}</bdi></h4>
                             </div>
                             <div class="bmc-detail">
-                                <p class="board" title="CBSE">Board &nbsp;:&nbsp; ${item.se_boards[0]}</p>
-                                <p class="medium" title="English">Medium &nbsp;:&nbsp; ${item.se_mediums[0]}</p>
+                                <p class="board" title="CBSE">Board: ${item.se_boards[0]}</p>
+                                <p class="medium" title="English">Medium: ${item.se_mediums[0]}</p>
                                 <p class="grade" title="Class 9">${item.se_gradeLevels[0]}</p>
                             </div>
+                            </div>
+                        </div>
                         </div>
                     </div>
-                  </a>
-                </div>
+                    </button>
               `;
       slides.push(cardHtml);
-      console.log("slides--->",slides);
       // set up the indicator
       activeClass = index == 0 ? ' class="active" ' : ""; // see note about the active slide above- same goes for the indicators
       html = `<li data-bs-target="${targetCarouselId}" data-slide-to="${index}" ${activeClass}></li>`;
@@ -637,9 +686,9 @@ $(document).ready(function () {
       indicators.push(html);
       // $container.append(cardHtml);
     });
-    document.getElementById("carousel-indicators").innerHTML =
+    document.getElementById(`${indicatorsId}`).innerHTML =
       indicators.join("");
-    document.getElementById("carousel-items").innerHTML = slides.join("");
+    document.getElementById(`${itemsId}`).innerHTML = slides.join("");
     $(`${targetCarouselId}`).carousel();
 
     let parentstudyitems = document.querySelectorAll(
@@ -660,19 +709,25 @@ $(document).ready(function () {
     });
   }
 
-  $(".nistha-course-card").click(function () {
-    const contentType = $(this).data("contenttype");
-    const board = $(this).data("board");
-    const grade = $(this).data("grade");
-
-    // Construct the URL with query parameters
-    const url = `/explore?selectedTab=${encodeURIComponent(
-      contentType
-    )}&board=${encodeURIComponent(board)}&gradeLevel=${encodeURIComponent(
-      grade
-    )}`;
-
-    // Redirect to the new page
-    window.location.href = url;
-  });
+  
 });
+
+function redirectTpPortal(state, grade, contentType){
+    console.log("test-->");
+    const url = `/explore?selectedTab=${encodeURIComponent(
+        contentType
+      )}&board=${encodeURIComponent(state)}&gradeLevel=${encodeURIComponent(
+        grade
+      )}`;
+  
+      console.log("url--->",url);
+      // Redirect to the new page
+      // window.location.href = url;
+      window.open('/explore/', "_self");
+      return false;
+}
+
+function yourFunction() {
+    alert("clicked...");
+}
+
