@@ -25,7 +25,7 @@ export class GoogleAuthService {
           'https://classroom.googleapis.com/$discovery/rest?version=v1',
         ],
         scope:
-          'https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.coursework.students https://www.googleapis.com/auth/classroom.coursework.me https://www.googleapis.com/auth/classroom.rosters',
+          'https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.coursework.students https://www.googleapis.com/auth/classroom.coursework.me https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.addons.teacher https://www.googleapis.com/auth/classroom.announcements',
       });
       this.authInstance = gapi.auth2.getAuthInstance();
       this.gapiSetup = true;
