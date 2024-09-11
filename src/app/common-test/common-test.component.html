@@ -1,8 +1,5 @@
 <p>common-test works!</p>
 
-
-
-
 <button (click)="navigateToLMSWeb()">Call API</button> <br /> <br />
 
 <button (click)="openWebview()">Call Token API</button> <br /> <br />
@@ -16,23 +13,62 @@
 <button (click)="callReadAPI()">Call Read API</button>
 
 
-
 <div (click)="testDivButton()">Test DIV</div> <br /> <br />
+
+<app-popup [isVisible]="showPopup" [title]="'My Popup'" [content]="'This is some content for the popup'" (close)="closePopup()"></app-popup>
+<button (click)="openPopup()">Open Popup</button>
 
 
 <p>Style 1</p> <br />
 <div style="display: flex;">
-    <img *ngIf="showMainLogo" (click)="testDivButton()" class="cursor-pointer" alt="Diksha Logo" [src]= "mainLogo" style="width: 97px; height: 55px;">
-    <div *ngIf=" ('mainLogo' != tenantInfo.logo) && showMainLogo " style="width: 2px; height: 50px; background-color: #d5d5d5; margin: 0 12px;"></div>
-    <img *ngIf=" 'mainLogo' != tenantInfo.logo " (click)="testDivButton()" alt="State Logo" [src]= stateLogo style="width: 55px; height: 55px;">
+    <img *ngIf="showMainLogo" (click)="testDivButton()" class="cursor-pointer" alt="Diksha Logo" [src]="mainLogo"
+        style="width: 97px; height: 55px;">
+    <div *ngIf=" ('mainLogo' != tenantInfo.logo) && showMainLogo "
+        style="width: 2px; height: 50px; background-color: #d5d5d5; margin: 0 12px;"></div>
+    <img *ngIf=" 'mainLogo' != tenantInfo.logo " (click)="testDivButton()" alt="State Logo" [src]=stateLogo
+        style="width: 55px; height: 55px;">
 </div>
 <br><br>
 
-<div >
-    <button *ngIf="isShowGoogleCLassAddButton" class="btn add-gc-btn" (click) = "callAPI($event)">Add</button>
+<div>
+    <button *ngIf="isShowGoogleCLassAddButton" class="btn add-gc-btn" (click)="callAPI($event)">Add</button>
 </div>
 <h1 *ngIf="(condition1 == 'student' || condition2 == 'teacher') && condition3 == 'home' ">Satisfied</h1>
 
 <br><br>
 
-<button  (click) = "googleRedirect()">Redirect to Diksha web portal</button>
+<button (click)="googleRedirect()">Redirect to Diksha web portal</button>
+
+<br><br>
+
+<h2>Learner passbook (FY:{{financialYearRange}}, Duration:{{totalCourseDuration | number:'1.2-2'}}) &#x200E; </h2>
+<table>
+    <thead>
+        <tr>
+            <th>Certificate given by</th>
+            <th>Course</th>
+            <th>Course Duration</th>
+            <th>Certificate issued date</th>
+            <th>Course Credit</th>
+            <th>Download URL</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of otherCertificates">
+            <td>{{ data.issuerName }}</td>
+            <td>{{ data.trainingName }}</td>
+            <td><span *ngIf="data.courseDuration; else noDuration">{{ data.courseDuration }}</span>
+                <ng-template #noDuration>
+                    <span class="line-bar"></span>
+                </ng-template>
+            </td>
+            <td>{{ data.issuedOn }}</td>
+            <td><span *ngIf="data.courseCredit; else noCredit">{{ data.courseCredit }}</span>
+                <ng-template #noCredit>
+                    <span class="line-bar"></span>
+                </ng-template>
+            </td>
+            <td><a [href]="data.templateUrl" target="_blank">Download</a></td>
+        </tr>
+    </tbody>
+</table>

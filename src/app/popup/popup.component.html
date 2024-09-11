@@ -1,0 +1,8 @@
+<div class="popup-overlay" *ngIf="isVisible">
+    <div class="popup-content">
+      <h2>{{ title }}</h2>
+      <p>{{ content }}</p>
+      <button (click)="closePopup()">Close</button>
+    </div>
+  </div>
+  

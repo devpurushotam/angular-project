@@ -15,11 +15,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import axios from 'axios';
 
+import { PopupService } from '../services/shared-service'
+
+
 
 @Component({
   selector: 'app-common-test',
   templateUrl: './common-test.component.html',
-  styleUrls: ['./common-test.component.css']
+  styleUrls: ['./common-test.component.css', './style.scss']
 })
 export class CommonTestComponent implements OnInit {
   token: any;
@@ -31,6 +34,97 @@ export class CommonTestComponent implements OnInit {
   stateLogo = "https://dev.oci.diksha.gov.in/tenant/br/logo.png";
   tenantInfo: any = {};
   currentUrl: string;
+  showPopup = false;
+
+  financialYearRange = '24-25';
+  totalCourseDuration = 16.44444;
+
+ 
+
+    otherCertificates = [
+      {
+        id: '1-c967376f-b053-4bde-9b65-94670e4d3ad7',
+        trainingName: 'Coursecbse',
+        issuerName: 'cbse',
+        issuedOn: '2024-05-20T10:59:20.583Z',
+        courseId: 'do_31405684650717184016',
+        templateUrl: 'https://obj.vdn.diksha.gov.in/dev-contents-storage/content/do_3135863154501632001905/artifact/do_3135863154501632001905_1658485773442_certificate_2022-07-22_15_59.svg',
+        type: 'rc_certificate_registry',
+        courseDuration: null,
+        courseCredit: null
+      },
+      {
+        id: '1-2c40ad01-757e-4be7-8357-c25a64968b15',
+        trainingName: 'new course create',
+        issuerName: 'ncert',
+        issuedOn: '2024-05-08T10:00:28.857Z',
+        courseId: 'do_31404924788734361614',
+        templateUrl: 'https://obj.vdn.diksha.gov.in/dev-contents-storage/content/do_314039880557756416195/artifact/do_314039880557756416195_1713852607301_certificate_2024-04-23_11_40.svg',
+        type: 'rc_certificate_registry',
+        courseDuration: null,
+        courseCredit: null
+      },
+      {
+        id: '1-22786f51-7428-4b23-8d68-ab182a373775',
+        trainingName: 'course duration new dev',
+        issuerName: 'ncert',
+        issuedOn: '2024-08-20T05:09:04.085Z',
+        courseId: 'do_314124067548905472119',
+        templateUrl: 'https://files.odev.oci.diksha.gov.in/dev-contents-storage/content/do_314121423417655296111/artifact/do_314121423417655296111_1723806570198_certificate_2024-08-16_16_39.svg',
+        type: 'rc_certificate_registry',
+        courseDuration: '8.3333',
+        courseCredit: '0.5'
+      },
+      {
+        id: '1-5f4688cd-a385-4405-aa37-04ee93244042',
+        trainingName: 'new course create',
+        issuerName: 'ncert',
+        issuedOn: '2024-05-24T09:50:36.181Z',
+        courseId: 'do_31406192208792780812',
+        templateUrl: 'https://obj.vdn.diksha.gov.in/dev-contents-storage/content/do_314039869032939520190/artifact/do_314039869032939520190_1713851200589_certificate_2024-04-23_11_16.svg',
+        type: 'rc_certificate_registry',
+        courseDuration: null,
+        courseCredit: null
+      },
+      {
+        id: '1-b9603406-8081-4ac7-86b1-317edec6150c',
+        trainingName: 'duration ncert',
+        issuerName: 'ncert',
+        issuedOn: '2024-08-19T05:07:31.690Z',
+        courseId: 'do_31412336323853516814',
+        templateUrl: 'https://files.odev.oci.diksha.gov.in/dev-contents-storage/content/do_31402501516898304019/artifact/do_31402501516898304019_1712037985317_certificate_2024-04-02_11_36.svg',
+        type: 'rc_certificate_registry',
+        courseDuration: '8.5555',
+        courseCredit: null
+      },
+      {
+        id: '1-f98d3815-01aa-4b4b-99a8-e2f4c0764c06',
+        trainingName: 'dev course',
+        issuerName: 'ncert',
+        issuedOn: '2024-05-22T05:36:46.085Z',
+        courseId: 'do_31406038672761651219',
+        templateUrl: 'https://obj.vdn.diksha.gov.in/dev-contents-storage/content/do_314039880557756416195/artifact/do_314039880557756416195_1713852607301_certificate_2024-04-23_11_40.svg',
+        type: 'rc_certificate_registry',
+        courseDuration: null,
+        courseCredit: null
+      },
+      {
+        id: '1-ce97724b-a5be-48da-95a0-541913612d4b',
+        trainingName: 'new course 21',
+        issuerName: 'ncert',
+        issuedOn: '2024-05-21T05:19:58.851Z',
+        courseId: 'do_31405966948160307211',
+        templateUrl: 'https://obj.vdn.diksha.gov.in/dev-contents-storage/content/do_314039880557756416195/artifact/do_314039880557756416195_1713852607301_certificate_2024-04-23_11_40.svg',
+        type: 'rc_certificate_registry',
+        courseDuration: null,
+        courseCredit: null
+      }
+    ]
+
+
+course_duration = [];
+course_credit = [];
+
   src = "https://www.google.com"
   isShowGoogleCLassAddButton: boolean = false;
 
@@ -41,12 +135,23 @@ export class CommonTestComponent implements OnInit {
   constructor(
     public userLMSToken: userLMSToken,
     public encryptionService: EncryptionService,
+    private popupService: PopupService,
     private http: HttpClient) { }
 
   mainLogo: string;
   showMainLogo: boolean = true;
 
   ngOnInit(): void {
+
+    // this.result.content.map((contentData)=>{
+    //     console.log(contentData.courseCredit);
+
+    //     this.courseDuration.push(contentData.courseDuration);
+    //     this.courseCredit.push(contentData.courseCredit)
+    // })
+
+    console.log('387---', this.course_credit, this.course_duration);
+
     this.tenantInfo.logo = "https://dev.oci.diksha.gov.in/tenant/br/logo.png";
     console.log('Current URL:', window.location.href);
     this.getLolo();
@@ -275,4 +380,13 @@ export class CommonTestComponent implements OnInit {
     const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scopes}`;
     window.location.href = authUrl;
   }
+
+  closePopup() {
+    this.showPopup = false;  // Handle closing the popup
+  }
+
+  openPopup() {
+    this.popupService.openPopup();  // Open the popup via the service
+  }
+  
 }
