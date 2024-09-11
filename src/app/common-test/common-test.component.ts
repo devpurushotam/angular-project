@@ -37,7 +37,7 @@ export class CommonTestComponent implements OnInit {
   showPopup = false;
 
   financialYearRange = '24-25';
-  totalCourseDuration = 16;
+  totalCourseDuration = 16.44444;
 
  
 
@@ -72,7 +72,7 @@ export class CommonTestComponent implements OnInit {
         courseId: 'do_314124067548905472119',
         templateUrl: 'https://files.odev.oci.diksha.gov.in/dev-contents-storage/content/do_314121423417655296111/artifact/do_314121423417655296111_1723806570198_certificate_2024-08-16_16_39.svg',
         type: 'rc_certificate_registry',
-        courseDuration: '8',
+        courseDuration: '8.3333',
         courseCredit: '0.5'
       },
       {
@@ -94,7 +94,7 @@ export class CommonTestComponent implements OnInit {
         courseId: 'do_31412336323853516814',
         templateUrl: 'https://files.odev.oci.diksha.gov.in/dev-contents-storage/content/do_31402501516898304019/artifact/do_31402501516898304019_1712037985317_certificate_2024-04-02_11_36.svg',
         type: 'rc_certificate_registry',
-        courseDuration: '8',
+        courseDuration: '8.5555',
         courseCredit: null
       },
       {
