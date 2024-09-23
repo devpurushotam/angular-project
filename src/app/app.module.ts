@@ -10,6 +10,8 @@ import { GoogleClassroomIframeComponent } from './google-classroom-iframe/google
 import { GoogleAuthComponent } from './google-auth/google-auth.component';
 import { SilentAuthComponent } from './silent-auth/silent-auth.component';
 import { PopupComponent } from './popup/popup.component';
+import { LoaderComponent } from './loader/loader.component';
+
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { PopupComponent } from './popup/popup.component';
     GoogleClassroomIframeComponent,
     GoogleAuthComponent,
     SilentAuthComponent,
-    PopupComponent
+    PopupComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
