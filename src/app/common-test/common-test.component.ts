@@ -208,7 +208,7 @@ course_credit = [];
       console.log("data", key)
       this.userLMSToken.encryptData(userData, key).then((encryptedData) => {
         console.log("encryptedData", encryptedData)
-        const url = `${apiUrl}?data=${encryptedData}`;
+        const url = `${apiUrl}?data=${encryptedData.data}&iv=${encryptedData.iv}`;
         console.log("url", url)
 
 
@@ -388,5 +388,50 @@ course_credit = [];
   openPopup() {
     this.popupService.openPopup();  // Open the popup via the service
   }
-  
+
+  async aesEncryption() {
+    let userData = {
+      "firstname": "Purushotam Kumar",
+      "lastname": "",
+      "emailid": "purushotamfntest@yopmail.com",
+      "phone": "",
+      "userid": "2f47892e-0de1-409e-8b05-4f5d9db18278",
+      "userName": "purushotamkumar_qgwn",
+      "maskedPhone": "",
+      "maskedEmail": "pu**************@yopmail.com",
+      "profileUserType": "teacher",
+      "profileUserSubType": "",
+      "rootOrgName": "DIKSHA Custodian Org",
+      "board": "CBSE",
+      "medium": "English",
+      "class": "Class 2",
+      "redirecturl": "https://dev-learning.diksha.gov.in/diksha/diksha_sso.php?token=",
+      "userRoles": [
+        "PUBLIC"
+      ],
+      "rootOrgId": "0126684405014528002",
+      "state": "Bihar",
+      "district": "Banka",
+      "block": "Belhar",
+      "cluster": "M.S. Belhar",
+      "school": "N.P.S. Jhunka",
+      "code": "10232820901"
+    }
+
+    this.userLMSToken.aesGenerateKey()
+      .then(async key => {
+        const encryptedData = await this.userLMSToken.aesEncryptData(userData, key);
+        console.log("getting key", key);
+        console.log("encryptedData", encryptedData);
+
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin' : '*' });
+        const apiUrl = `http://localhost:3000/lms/v1/lmsTokenGeneration`; //'https://jenkins.oci.diksha.gov.in/diksha-jwttoken/jwtlmsgenarator';
+        console.log("apiUrl", apiUrl);
+        this.http.post(apiUrl, encryptedData, { headers, responseType: "text" })
+          .subscribe(response => {
+            console.log('Server response:', response);
+            window.open('https://dev-learning.diksha.gov.in/diksha/diksha_sso.php?token=' + response, '_blank'); // new tab
+          });
+      });
+  }
 }
