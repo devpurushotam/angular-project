@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 // import { GoogleClassroomService } from '../services/google-classroom-service';
 import { GoogleClassroomService } from '../services/google-classroom-service';
+import { AesService } from '../services/aes-encryption-decryption-fixed-key'
 
 @Component({
   selector: 'app-google-classroom',
@@ -17,15 +18,19 @@ export class GoogleClassroomComponent implements OnInit {
   token: any;
   courseDetail: any = {};
   courseId: any;
+  decryptedObject: any = null;
+  tokenData: any;
   constructor(
     private route: ActivatedRoute,
     public googleClassroomService: GoogleClassroomService,
     // public userLMSToken: userLMSToken,
+    private aesService: AesService,
   ) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const code = params['code'];
+      this.tokenData =  decodeURIComponent(params['token']); //"Mv/tmHEHW+QdOvaklfC5AUCbAnU4zjT7JZiGujR7nNM7oiiIeo29MUV/oHOgsObCvnDKIeQItw8cvyuPUXDu0SkWmthG4waWmOsNnLgU+BZloWiJZnJWEaGmu4ipjiyxhRMLnbhfD/q8tVlmjH9vVUsOJKev0ZJztzsTVt1OjNZ4Bz0CAavMxBDJxYpeF0a3IKzPyn3hmS9WP1XWoM+Y7JUAvw2I8g4WM0xeKT7ywwAogzc//E+u69Nq1L2IwKsACDjj5zi4iqA+KwrWpMWmZUzmj8KYnaVJoTbXd9YFTGT3bX8ZTARX0OL5hGZYdJdznR8GrNHO50k+0V0Iu+yGg4tUZTlv1+wHyn1Lvyls8WV9m2WyDFSxWddBUZO2wJaVQtugva7QmdJYNgwKh7Y0vN6dMhoFr3GHzbqGZ9V/x7FFNQo8G6ruTrWXvA2s29z7wb/qVlirpMVFvOm5LMrCyagoHxdQ0PWZmN2M12Kvz7uquuqZDyY/p+fJSrY561eI2zb4Qs8iHRYSaodoj1DUYVkhdKPKIVoR4WXWqIitJwv+EuZSOdWxjlibgz4jO8ZhSFZATL8BpfA+LUd7moeAqzPaBLXJRgaAmv3PaJcVHjcK5QO2CPWXhTS91ClGzmh1gFXfEdte68gJDRRCuwRxen3BtWOYWf5Xp7YwM+2oSOh3f9DpRnMB5/yA+8NEU4VHl8UrE/R/9Uns3crrqnGXMQZ0v1fiVGBZ10r9UCkZoH0azGxS7tPo21Jc/2RTRUL9okQgzfzs8b2vAxigJrbQmJb3vW2p7qy7l5mb3JEMmh7rrK/1yHO6JmHl2Ab9be1/TxVu1Upq4z0LJCTWbOv/ywjW5qM5H/7z5sr0tJVk5HN721nl6cWZNfb3YQ3Gk9PVjVOI4H1Ek+QlD2cWiu54cztIm2srcvvBW+T1txutKmvdxFjx+RX7/qRJ1FnWFPdWuSGjl71G/NG1JUAqOe9/0fg7PNPMQQPJ";
       if (code) {
         this.googleClassroomService.exchangeCodeForToken(code)
           .then(tokenResponse => {
@@ -37,6 +42,11 @@ export class GoogleClassroomComponent implements OnInit {
           });
       }
     });
+
+    // this.route.queryParams.subscribe(params => {
+    //   this.tokenData = params['toke']; // Extract 'toke' parameter
+    //   console.log('Token:', this.token);
+    // });
   }
 
 
@@ -191,6 +201,12 @@ export class GoogleClassroomComponent implements OnInit {
       .catch(error => {
         console.error(error);
       });
+  }
+
+  async decrypt() {
+    console.log("decrypt", this.tokenData);
+    this.decryptedObject = await this.aesService.decryptData(this.tokenData);
+    console.log("decrypted1111", this.decryptedObject);
   }
 
 }

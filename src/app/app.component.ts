@@ -21,8 +21,17 @@ export class AppComponent {
   ) { }
 
   ngOnInit() {
+    (window as any).fbAsyncInit = function () {
+      window['FB'].init({
+        appId: '557200617035448', // Replace with your Facebook App ID
+        cookie: true,
+        xfbml: true,
+        version: 'v12.0' // Use the latest version
+      });
+    }
   }
-
   addAttachment() {
   }
 }
+
+

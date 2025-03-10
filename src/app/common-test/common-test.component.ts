@@ -6,7 +6,7 @@ import {
 } from '../services/api-services';
 
 import {
-  EncryptionService
+  aesEncryptionMethod
 } from '../services/encrypt-decrypt-object';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -134,7 +134,7 @@ course_credit = [];
 
   constructor(
     public userLMSToken: userLMSToken,
-    public encryptionService: EncryptionService,
+    public encryptionService: aesEncryptionMethod,
     private popupService: PopupService,
     private http: HttpClient) { }
 
