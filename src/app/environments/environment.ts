@@ -13,3 +13,9 @@ export const environment = {
     googleApiKey: 'AIzaSyAGpLhARvVT47mT8qQHD8EXXXUDsaREnco',
     googleRedirectUri: 'http://localhost:4200/google-class-room'
   };
+
+  export const admin_environment = {
+    googleClientId: '903323439573-cfc2qt740en6hoj0ab809d14sndjfkb9.apps.googleusercontent.com',
+    googleClientSecret: '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',
+    googleApiKey: 'AIzaSyCQzXDYDJz9ow1lTWbm7ww0_tWX_rHpF2Y',
+  }
