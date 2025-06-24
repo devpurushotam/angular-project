@@ -15,6 +15,7 @@ import { frameworkList, filterByName } from '../services/search-data';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AesService } from '../services/aes-encryption-decryption-fixed-key'
 import { SearchEncryptionService } from '../services/content-search-with-encryption'
+import { SignatureService } from '../services/protectAPI';
 @Component({
   selector: 'app-silent-auth',
   templateUrl: './silent-auth.component.html',
@@ -71,7 +72,8 @@ export class SilentAuthComponent implements OnInit, OnDestroy {
     public encryptionService: aesEncryptionMethod,
     private http: HttpClient,
     private aesService: AesService,
-    private searchEncryptionService: SearchEncryptionService
+    private searchEncryptionService: SearchEncryptionService,
+    private signatureService: SignatureService
   ) { }
   ngOnDestroy(): void {
     throw new Error('Method not implemented.');
@@ -80,6 +82,8 @@ export class SilentAuthComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload', ['$event'])
 
   ngOnInit(): void {
+    let dataaaa = encodeURIComponent('ypOBYjfjj3i0MthVdIOxuANV2MoRyYiPz5cLSj+YilnIWr9WP4RguwXOlmyx8v7yQe6Lb0Wb48AVxQGOWofCDkCKaXQqWH06etVHnzypWL2iUMhD/2pZ8ouutWyUEZVOIycDoGA4VAXfyDQtDNCrnSZWCHL6bnisyHBU5H7R5SR3qNInMk1X/4pCI2PEN03P4Ep50atYZlzRtCj7+2DlcIzR7A8OvUmSUHfmk7vgCZNfkpQFSFqsDwEmX+m6ZAliWRAVijjU7VAi+XPBvfhhL62EvXwjkw67ansnabTowpaPQVzeGJMC78uw%23%26MM6iEXMu2JFgNGnR%23%265GXh0egOQOj82oozLrFe9A==%23%26lygbVg2/6p8sLfqrRWeYQ08THRv8J0AcWF6DzeaUPpE=');
+    console.log("getting URI encodded data", dataaaa);
     console.log("getting state", this.formatText("State (Bihar)"));
     console.log("base url", window.location.origin)
     let stateId: any = filterByName("State (Delhi)")
@@ -262,5 +266,47 @@ export class SilentAuthComponent implements OnInit, OnDestroy {
     return str.toLowerCase().replace(/\b\w/g, function (char) {
       return char.toUpperCase();
     });
+  }
+
+  sendSecureRequest() {
+    // const requestData = { userId: 123, action: 'getData' };
+
+    const requestData = {
+      // "request": {
+        "key": "gecrejussowoi-922@yopmail.com",
+        "type": "email"
+      // },
+      // "signature": "uJ7JuBGdkRh7GiwfTdPJxsz5wi5Lrn3DIChWdZ3TbCY="
+    }
+    const signedRequest = this.signatureService.signRequest(requestData);
+    this.http.post('http://localhost:5000/aes/read-data', signedRequest).subscribe((response: any) => {
+      const testTemperedResponse = {
+        "statusCode": 200,
+        "message": "API accessed successfully",
+        "name": "test",
+        "timestamp": "2025-03-13T10:01:39.133Z",
+        "address": "test address",
+        "email": "test email",
+        "mobile": "test mobile",
+        "signature": "2c73bde1ede948e4220678411a23e5844868ad24c2067946e05a603d4224f16a"
+      }
+      if (this.signatureService.verifyResponse(response)) {
+        console.log('Response is valid:', response);
+      } else {
+        console.error('Response has been tampered!');
+      }
+    });
+  }
+
+
+  async decryptData() {
+    const encryptedData = { "data": "WZ2QQU+UpmdDiS6wwOXifthO0w2ARNCItvHwIFBU+dwRjY9gl4wspMC8uej5ulYaanpsg5fFirwJnmcIRI4Apn4qJVex2S+XYgsnlEDQEM7pZyi434+sDqbHBhFAWBvnvw+CkCwHvZtJQJUgteBlW4T0VnmkIfPEuNocSuHcrjP2l0prIyeUmOarFRxcMaPotsdx9WzKVFfYM2++1HgEA72lhSy3PiRUZIkaTv942FsOVNBmgPUsiqNk6U1FrtMT2VA8vzWqAjB9Ebb/f7QfhowWSmZq0UQi4WpcPS2CWj9pTM1WwbGmkzGJ/sWjEhKsH0dO/UB4EN6KKHYr9Cof+yF9dA7iMAITIdTqjOHDrzWJTQ==#&icJprFQSPew7r/sj#&TxjzSGiI69qiLqiMPsO08w==#&jJsS3gcy7Dg8YMJyaPSHQIRMJ2BgLffERgBUtVxbuqg=", "isEncryption": true }
+    const decryptedData = await this.encryptionService.decryptData(encryptedData);
+    console.log("decrypted", decryptedData);
+  }
+
+
+  locationUrl(){
+    window.location.href = "https://google.com"
   }
 }

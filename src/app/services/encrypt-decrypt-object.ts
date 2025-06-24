@@ -118,4 +118,61 @@ export class aesEncryptionMethod {
         };
 
     }
+
+    // Decryption method
+
+    base64ToArrayBuffer(base64: string): Uint8Array {
+        const binaryString = atob(base64);
+        const length = binaryString.length;
+        const bytes = new Uint8Array(length);
+        for (let i = 0; i < length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+        return bytes;
+    }
+
+    async importKey(keyData: Uint8Array): Promise<CryptoKey> {
+        return await crypto.subtle.importKey(
+            "raw", // Raw format
+            keyData,
+            { name: "AES-GCM" },
+            true, // Extractable
+            ["decrypt"] // Key usage
+        );
+    }
+
+    async decryptData(encryptedText: any): Promise<any> {
+        try {
+            const encryptedData = encryptedText?.data?.split('#&');
+            if (encryptedData.length !== 4) {
+                throw new Error('Invalid encrypted data format');
+            }
+
+            const dataBuffer = this.base64ToArrayBuffer(encryptedData[0]);
+            const ivBuffer = this.base64ToArrayBuffer(encryptedData[1]);
+            const authTagBuffer = this.base64ToArrayBuffer(encryptedData[2]);
+            const keyBuffer = this.base64ToArrayBuffer(encryptedData[3]);
+
+            // Import the encryption key
+            const key = await this.importKey(keyBuffer);
+
+            // Merge `dataBuffer` and `authTagBuffer` without spread (`...`)
+            const encryptedArray = new Uint8Array(dataBuffer.length + authTagBuffer.length);
+            encryptedArray.set(dataBuffer, 0);
+            encryptedArray.set(authTagBuffer, dataBuffer.length);
+
+            // Decrypt using Web Crypto API
+            const decrypted = await crypto.subtle.decrypt(
+                { name: "AES-GCM", iv: ivBuffer },
+                key,
+                encryptedArray
+            );
+
+            const decodedData = new TextDecoder().decode(decrypted);
+            return JSON.parse(decodedData);
+        } catch (error) {
+            console.error('Decryption error:', error);
+            return null;
+        }
+    }
 }
