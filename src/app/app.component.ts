@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,Renderer2,ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -17,10 +17,11 @@ export class AppComponent {
 
   title = 'my-angular-project';
 
-  constructor(
+  constructor( private renderer: Renderer2,private el: ElementRef
   ) { }
 
   ngOnInit() {
+    this.intializebhasiniTranslationPlugin();
     (window as any).fbAsyncInit = function () {
       window['FB'].init({
         appId: '557200617035448', // Replace with your Facebook App ID
@@ -31,6 +32,21 @@ export class AppComponent {
     }
   }
   addAttachment() {
+  }
+
+  intializebhasiniTranslationPlugin(){
+    try {
+      const container = this.el.nativeElement.querySelector('.bhashini-plugin-container');
+
+    if (container) {
+      const script = this.renderer.createElement('script');
+script.src = 'http://files.odev.oci.diksha.gov.in/ntp-content-production/website_translation_utility.js';      script.async = true;
+      this.renderer.appendChild(document.body, script);
+    } 
+    } catch (error) {
+      console.log('Translation failed:', error);
+    }
+    
   }
 }
 

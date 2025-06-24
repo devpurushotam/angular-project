@@ -23,4 +23,8 @@ nav {
   a:hover {
     text-decoration: underline;
   }
+
+  .bhashini-plugin-container{
+	z-index: 999 !important;
+}
   
